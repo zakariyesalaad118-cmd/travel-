@@ -20,7 +20,10 @@ function SearchWidget(){
 }
 export function Home(){
   const [d,dl]=useGet('/destinations'),[p,pl]=useGet('/packages'),[rv]=useGet('/reviews'),[m,setM]=useState(''),[em,setEm]=useState('');
-  const sh=t=>(d||[]).filter(x=>x.type===t).slice(0,4);
+ 
+  const sh = t =>
+  (Array.isArray(d) ? d : []).filter(x => x.type === t).slice(0, 4);
+  
   return <>
   <header className="hero"><div className="wrap"><div className="fade"><span className="tag" style={{background:'#C9A45C',color:'#101D2C'}}>✦ Premium Travel Agency</span><h1 style={{marginTop:16}}>YOUR JOURNEY,<br/><em>OUR PASSION.</em></h1><p>Discover extraordinary destinations, experience unforgettable journeys, and explore the world with confidence. SOM TREVEL turns every journey into an exceptional experience.</p>
     <p><Link className="btn" to="/destinations">Explore Destinations →</Link> <Link className="btn ghost" to="/packages">Book Your Journey</Link></p>
