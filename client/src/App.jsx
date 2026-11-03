@@ -18,7 +18,8 @@ class Boundary extends Component{
 function Bell(){
   const {user}=useAuth(),[l,setL]=useState([]),[open,setOpen]=useState(false);
   useEffect(()=>{if(!user)return;const f=()=>api('/notifications').then(setL).catch(()=>{});f();const t=setInterval(f,60000);return()=>clearInterval(t)},[user]);
-  const n=l.filter(x=>!x.read).length;
+  const n=(Array.isArray(l)?l:[]).filter(x=>!x.read).length;
+
   return <span style={{position:'relative'}}><button className="bell" aria-label="Notifications" onClick={()=>{setOpen(!open);if(!open&&n)api('/notifications/read',{method:'POST'}).then(()=>setTimeout(()=>setL(x=>x.map(y=>({...y,read:true}))),1500)).catch(()=>{})}}>🔔{n>0&&<i>{n}</i>}</button>
    {open&&<div className="pop">{l.length?l.map(x=><div key={x._id} style={{padding:'8px 0',borderBottom:'1px solid #eee'}}><b style={{fontSize:13}}>{x.title}</b><div className="muted">{x.body}</div><div className="muted" style={{fontSize:11}}>{fmt(x.createdAt)}</div></div>):<p className="muted">No notifications</p>}</div>}</span>;
 }
