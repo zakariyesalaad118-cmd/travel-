@@ -1,3 +1,12 @@
+import express from 'express';
+import cors from 'cors';
+
+const app = express();
+
+// Oggolow CORS dhammaan ama domain-kaaga konkretiga ah
+app.use(cors()); 
+app.use(express.json());
+
 import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
