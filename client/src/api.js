@@ -3,8 +3,13 @@ export const api=async(p,o={})=>{
   const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),25000);
   try{
     const r=await fetch('/api'+p,{credentials:'include',headers:{'Content-Type':'application/json'},...o,body:o.body?JSON.stringify(o.body):undefined,signal:ctl.signal});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok)throw new Error(d.error||'Qalad ayaa dhacay, fadlan dib isku day');
+    const ct=r.headers.get('content-type')||'';
+if(!ct.includes('json')){
+  if(r.ok&&r.status===204)return {};
+  throw new Error('Server-ka (API) lama gaari karo');
+}
+const d=await r.json().catch(()=>({}));
+if(!r.ok)throw new Error(d.error||'Qalad ayaa dhacay, fadlan dib isku day');
     return d;
   }catch(e){throw new Error(e.name==='AbortError'?'Server-ku wuu daahay, dib isku day':e.message==='Failed to fetch'?'Internet ama server ma shaqeeyo':e.message)}
   finally{clearTimeout(tm)}
